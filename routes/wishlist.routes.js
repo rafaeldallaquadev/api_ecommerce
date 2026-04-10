@@ -1,8 +1,12 @@
 import express from 'express';
 import { verifyAuth } from '../middlewares/user.middlewares.js';
+import * as controller from '../controllers/wishlist.controller.js'
 
 const router = express.Router();
 
-router.get('/wishlist/', verifyAuth );
-router.put('/wishlist/:product_id', verifyAuth);
-router.delete('/wishlist/:product_id', verifyAuth)
+router.get('/', verifyAuth, controller.getWishlist);
+router.post('/:productId', verifyAuth, controller.postWishlist);
+router.delete('/:productId', verifyAuth, controller.delWishlist);
+
+
+export default router
