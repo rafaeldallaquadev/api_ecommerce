@@ -1,5 +1,9 @@
+/.gitignore
+============
+
 node_modules/
 .env
 .env.*
 dist/
 build/
+notas.txt

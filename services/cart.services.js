@@ -1,3 +1,7 @@
+//services/cart.services.js
+//===================================
+ 
+
 import {pool} from '../db.js'
 
 export async function cartList(userId) {
@@ -190,92 +194,102 @@ export async function removeItem(userId, productId){
 }
 
 export async function completePurchase(userId){
+    const connection = await pool.getConnection();
+
     try {
-        
-        const [cartItems] = await pool.execute(
-                `select 
-                    p.id,
-                    p.name,
-                    p.price,
-                    p.stock,
-                    ci.quantity
-                FROM cart c
-                JOIN cart_items ci ON ci.cart_id = c.id
-                JOIN products p ON p.id = ci.product_id
-                WHERE c.user_id = ? 
-                AND c.status = 'active'`,
-                [userId]
-            )
-    
-            
+        await connection.beginTransaction();
+        const [cartItems] = await connection.execute(
+            `SELECT 
+                p.id,
+                p.name,
+                p.price,
+                p.stock,
+                ci.quantity
+            FROM products p
+            JOIN cart_items ci ON ci.product_id = p.id
+            JOIN cart c ON c.id = ci.cart_id
+            WHERE c.user_id = ? 
+            AND c.status = 'active'
+            FOR UPDATE`,
+            [userId]
+        );
+
         if (cartItems.length === 0) {
-            const error = new Error("Não foi possível localizar o carrinho")
-            error.status = 404
-            throw error
+            const error = new Error("Carrinho vazio");
+            error.status = 404;
+            throw error;
         }
-            
-        const [insufficientStock] = await pool.execute(
-            
+
+        const [insufficientStock] = await connection.execute(
             `
-            SELECT p.*
+            SELECT p.id
             FROM products p
             JOIN cart_items ci ON ci.product_id = p.id
             JOIN cart c ON c.id = ci.cart_id
             WHERE c.user_id = ?
             AND c.status = 'active'
-            AND ci.quantity > p.stock;`,
-            [userId]);
-            
-            
+            AND ci.quantity > p.stock
+            `,
+            [userId]
+        );
+
         if (insufficientStock.length > 0) {
-            console.log(insufficientStock)
             const error = new Error("Estoque insuficiente");
-            error.status = 409
-            throw error
+            error.status = 409;
+            throw error;
         }
-    
-        
-        const finalPrice = cartItems.reduce((total, i) => total = total + i.price*i.quantity, 0)
-        
-        const params = cartItems.map(i => i = [i.id, i.quantity])
-            
+
+        const params = cartItems.map(i => [i.id, i.quantity]);
         const ids = params.map(i => i[0]);
-        
+
         let caseSql = 'CASE id ';
-        params.forEach(([id, quantity]) => {
+        params.forEach(([id]) => {
             caseSql += `WHEN ${id} THEN ? `;
         });
-            
         caseSql += 'END';
-        
+
         const sql = `
             UPDATE products
             SET stock = stock - ${caseSql}
             WHERE id IN (${ids.map(() => '?').join(',')})
-            `;
-        
-            
+        `;
+
         const values = [
             ...params.map(i => i[1]),
-            ...ids                   
+            ...ids
         ];
+
+        await connection.execute(sql, values);
+
         
-        await pool.execute(sql, values);
-        await pool.execute(
+        await connection.execute(
             `
-            update cart
-            set status = "completed"
+            UPDATE cart
+            SET status = "completed"
             WHERE user_id = ? 
-            AND status = 'active'`,
+            AND status = 'active'
+            `,
             [userId]
-            )
-            
+        );
+
+        await connection.commit();
+
+        const finalPrice = cartItems.reduce(
+            (total, i) => total + i.price * i.quantity,
+            0
+        );
+
         return {
-            message: `Sua compra foi efetuada`,
+            message: "Compra efetuada com sucesso",
             produtos: cartItems,
-            Total: `R$${finalPrice}`                
-        }
+            total: finalPrice
+        };
+
     } catch (err) {
-        throw err
+        await connection.rollback();
+        throw err;
+
+    } finally {
+        connection.release();
     }
 }

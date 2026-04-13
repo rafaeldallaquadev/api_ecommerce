@@ -1,3 +1,6 @@
+//controllers/cart.controller.js
+//===================================
+ 
 import { pool } from "../db.js";
 import * as services from "../services/cart.services.js"
 
@@ -82,9 +85,4 @@ export async function checkout(req, res) {
             error: err.message || "Erro no servidor"
         })
     }
-
-
-
-
-
 }

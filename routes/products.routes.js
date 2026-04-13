@@ -1,4 +1,6 @@
 //routes/products.routes.js
+//===========================
+
 import express from 'express'
 import { verifyAuth } from '../middlewares/user.middlewares.js';
 import { verifyProduct, verifyUpdate } from '../middlewares/products.middlewares.js';

@@ -1,4 +1,6 @@
 //controllers/products.controller.js
+//===================================
+ 
 
 import {pool} from '../db.js'
 import * as services from '../services/products.services.js'

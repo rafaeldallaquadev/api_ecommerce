@@ -1,3 +1,6 @@
+//middlewares/products.middlewares.js
+//===================================
+ 
 export function verifyProduct(req, res, next) {
     try {
         const { name, price, stock } = req.body;

@@ -1,4 +1,6 @@
 //middlewares/user.middlewares.js
+//===================================
+ 
 import { isValidEmail, isValidPassword, isValidName } from "../utils/validators.js"
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'

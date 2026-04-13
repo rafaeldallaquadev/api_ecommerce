@@ -1,3 +1,6 @@
+//controllers/wishlist.controller.js
+//===================================
+ 
 import mysql from 'mysql2/promise'
 import {pool} from '../db.js'
 import * as services from '../services/wishlist.services.js'

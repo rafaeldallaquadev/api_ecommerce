@@ -1,4 +1,6 @@
 //app.js
+//===================
+
 import express from 'express'
 import userRouter from './routes/user.routes.js'
 import productsRouter from './routes/products.routes.js'

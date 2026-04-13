@@ -1,3 +1,6 @@
+//routes/wishlist.routes.js
+//==========================
+
 import express from 'express';
 import { verifyAuth } from '../middlewares/user.middlewares.js';
 import * as controller from '../controllers/wishlist.controller.js'
