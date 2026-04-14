@@ -7,7 +7,7 @@ import { errorMiddleware } from './middlewares/error.middlewares.js'
 
 const app = express();
 app.use(express.json());
-app.use(userRouter);
+app.use('/user', userRouter);
 app.use('/products', productsRouter);
 app.use('/wishlist', wishlistRouter);
 app.use('/cart', cartRouter);

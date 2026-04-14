@@ -50,7 +50,7 @@ export function validateRegister(req, res, next){
         return next()
 
     }catch (err) {
-        throw err
+        return next(err);
     }  
 }
 
@@ -70,7 +70,7 @@ export function validateLogin(req, res, next){
         return next();
 
     }catch (err) {
-        throw err
+        return next(err)
     }
 }
 
@@ -81,14 +81,14 @@ export async function verifyAuth(req, res, next) {
         
         if(!authHeader) {
             const error = new Error("Token não fornecido")
-            error.status = 400
+            error.status = 401
             throw error
         }
 
         const parts = authHeader.split(" ");
         if (parts.length !== 2) {
             const error = new Error("Token mal formatado")
-            error.status = 400
+            error.status = 401
             throw error
         }
 
@@ -96,7 +96,7 @@ export async function verifyAuth(req, res, next) {
 
         if (scheme !== "Bearer"){
             const error = new Error("Formato inválido")
-            error.status = 400
+            error.status = 401
             throw error
         } 
 
@@ -109,6 +109,6 @@ export async function verifyAuth(req, res, next) {
         
 
     }catch (err) {
-        throw err
+        return next(err)
     }
 }

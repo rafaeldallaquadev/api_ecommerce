@@ -3,7 +3,7 @@ import {pool} from '../db.js'
 export async function createProduct (name, price, stock, userId, description) {
     const [result] = await pool.execute(
             'INSERT into products (name, description, price, stock, user_id) values (?, ?, ?, ?, ?)',
-            [name, description.trim(), price, stock, userId]
+            [name, description, price, stock, userId]
         )
     
     return {

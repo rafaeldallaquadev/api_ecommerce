@@ -55,7 +55,7 @@ export function verifyProduct(req, res, next) {
         return next();
 
     } catch (err) {
-        throw err
+        return next(err)
     }
 }
 
@@ -129,7 +129,7 @@ export function verifyUpdate (req, res, next) {
 
         return next();
     } catch (err) {
-        throw err
+        return next(err)
     }
 
 }

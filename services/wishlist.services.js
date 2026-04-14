@@ -61,6 +61,9 @@ export async function getProductFromWishlist(minPrice, maxPrice,
             )
             const ids = lista.map(i => i.product_id)
             const placeholders = ids.map(() => '?').join(',');
+            if (ids.length === 0) {
+                return [];
+            }
             let query = `SELECT id, name, description, price, stock FROM products WHERE id in (${placeholders}) AND price BETWEEN ? AND ?`
             
             if (inStock === 'true') {
@@ -80,8 +83,11 @@ export async function getProductFromWishlist(minPrice, maxPrice,
                 [...ids, minPrice, maxPrice]
             )
     
-            return rows
-            
+            return {
+                page: pageNumber,
+                limit: limitNumber,
+                data: rows
+            }
         } catch (err) {
             throw err
         }
