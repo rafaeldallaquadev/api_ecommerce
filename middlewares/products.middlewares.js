@@ -5,33 +5,47 @@ export function verifyProduct(req, res, next) {
         const isEmpty = (value) => value == null || value === "";
 
         if (typeof name !== "string" || name.trim() === "") {
-            return res.status(400).json({ error: "Nome de produto inválido" });
+            const error = new Error("Nome de produto inválido")
+            error.status = 400
+            throw error
         }
 
         if (isEmpty(price)) {
-            return res.status(400).json({ error: "Preço é obrigatório" });
+            const error = new Error("Preço é obrigatório")
+            error.status = 400
+            throw error
         }
 
         if (Array.isArray(price) || (typeof price === "object" && price !== null)) {
-            return res.status(400).json({ error: "Preço inválido" });
+            const error = new Error("Preço inválido")
+            error.status = 400
+            throw error
         }
 
         const parsedPrice = Number(price);
         if (Number.isNaN(parsedPrice) || parsedPrice < 0) {
-            return res.status(400).json({ error: "Preço inválido" });
+            const error = new Error("Preço inválido")
+            error.status = 400
+            throw error
         }
 
         if (isEmpty(stock)) {
-            return res.status(400).json({ error: "Estoque é obrigatório" });
+            const error = new Error("Estoque obrigatório")
+            error.status = 400
+            throw error
         }
 
         if (Array.isArray(stock) || (typeof stock === "object" && stock !== null)) {
-            return res.status(400).json({ error: "Estoque inválido" });
+            const error = new Error("Estoque inválido")
+            error.status = 400
+            throw error
         }
 
         const parsedStock = Number(stock);
         if (!Number.isInteger(parsedStock) || parsedStock < 0) {
-            return res.status(400).json({ error: "Estoque inválido" });
+            const error = new Error("Estoque inválido")
+            error.status = 400
+            throw error
         }
 
         req.body.name = name.trim();
@@ -41,8 +55,7 @@ export function verifyProduct(req, res, next) {
         return next();
 
     } catch (err) {
-        console.error(err);
-        return res.status(500).json({ error: "Erro ao verificar produto" });
+        throw err
     }
 }
 
@@ -58,23 +71,31 @@ export function verifyUpdate (req, res, next) {
             price === undefined &&
             stock === undefined
         ){
-            return res.status(400).json({ error: "Nenhum campo enviado para atualização" });
+            const error = new Error("Nenhum campo enviado para atualização")
+            error.status = 400
+            throw error
         }
     
         if (name !== undefined) {
             if (typeof name !== 'string' || name.trim() === "") {
-                return res.status(400).json({error: "Nome inválido"})
+                const error = new Error("Nome inválido")
+                error.status = 400
+                throw error
             }
             req.body.name = name.trim();
         }
     
         if (price !== undefined) {
             if (Array.isArray(price) || (typeof price === "object" && price !== null)) {
-                return res.status(400).json({ error: "Preço inválido" });
+                const error = new Error("Preço inválido")
+                error.status = 400
+                throw error
             }
             const parsedPrice = Number(price);
             if (Number.isNaN(parsedPrice) || parsedPrice < 0) {
-                return res.status(400).json({ error: "Preço inválido" });
+                const error = new Error("Preço inválido")
+                error.status = 400
+                throw error
             }
     
             req.body.price = parsedPrice;
@@ -82,12 +103,16 @@ export function verifyUpdate (req, res, next) {
     
         if(stock !== undefined) {
             if (Array.isArray(stock) || (typeof stock === 'object' && stock !== null )){
-                return res.status(400).json({ error: "Estoque inválido"})
+                const error = new Error("Estoque inválido")
+                error.status = 400
+                throw error
             }
     
             const parsedStock = Number(stock);
             if (!Number.isInteger(parsedStock) || parsedStock < 0) {
-                return res.status(400).json({ error: "Estoque inválido" });
+                const error = new Error("Estoque inválido")
+                error.status = 400
+                throw error
             }
     
             req.body.stock = parsedStock
@@ -95,16 +120,16 @@ export function verifyUpdate (req, res, next) {
     
         if(description !== undefined) {
             if (typeof description !== 'string' || description.trim() === "") {
-                return res.status(400).json({ error: "Descrição inválida" });
+                const error = new Error("Descrição inválida")
+                error.status = 400
+                throw error
             }
             req.body.description = description.trim();
         }
 
         return next();
     } catch (err) {
-        console.error(err);
-        res.status(500).json({error: "Não foi possível verificar o produto"})
-
+        throw err
     }
 
 }

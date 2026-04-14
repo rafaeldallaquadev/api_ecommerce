@@ -18,7 +18,9 @@ export function validateRegister(req, res, next){
         
     
         if(!name || !email || !password) {
-            return res.status(400).json({error: "Campos obrigatórios"})
+            const error = new Error("Campos obrigatórios")
+            error.status = 400
+            throw error
         }
 
         const normalizedEmail = email.trim().toLowerCase()
@@ -28,23 +30,27 @@ export function validateRegister(req, res, next){
         req.body.name = normalizedName;
 
         if(!isValidName(normalizedName)) {
-            return res.status(400).json({error:"Nome inválido"})
+            const error = new Error("Nome inválido")
+            error.status = 400
+            throw error
         }
     
         if(!isValidEmail(normalizedEmail)){
-            return res.status(400).json({ error: "E-mail inválido" });
+            const error = new Error("E-mail inválido")
+            error.status = 400
+            throw error
         }
     
         if (!isValidPassword(password)) {
-            return res.status(400).json({
-                error: "Senha precisa conter pelo menos 8 caracteres, letras e números"})
+            const error = new Error("Senha precisa conter pelo menos 8 caracteres, letras e números")
+            error.status = 400
+            throw error
         }
     
         return next()
 
     }catch (err) {
-        console.error(err);
-        return res.status(500).json({error: "Não foi possível validar o registro"})
+        throw err
     }  
 }
 
@@ -54,7 +60,9 @@ export function validateLogin(req, res, next){
         const {email, password} = req.body
 
         if (!email || !password){
-            return res.status(400).json({error: "Campos obrigatórios"})
+            const error = new Error("Campos obrigatórios")
+            error.status = 400
+            throw error
         }
 
         req.body.email = email.trim().toLowerCase();
@@ -62,8 +70,7 @@ export function validateLogin(req, res, next){
         return next();
 
     }catch (err) {
-        console.error(err);
-        return res.status(500).json({error: "Não foi possível validar o login"})
+        throw err
     }
 }
 
@@ -73,18 +80,24 @@ export async function verifyAuth(req, res, next) {
 
         
         if(!authHeader) {
-            return res.status(401).json({ error: "Token não fornecido" });
+            const error = new Error("Token não fornecido")
+            error.status = 400
+            throw error
         }
 
         const parts = authHeader.split(" ");
         if (parts.length !== 2) {
-            return res.status(401).json({error: "Token mal formatado"})
+            const error = new Error("Token mal formatado")
+            error.status = 400
+            throw error
         }
 
         const [scheme, token] = parts;
 
         if (scheme !== "Bearer"){
-            return res.status(401).json({error: "Formato inválido"})
+            const error = new Error("Formato inválido")
+            error.status = 400
+            throw error
         } 
 
 
@@ -96,7 +109,6 @@ export async function verifyAuth(req, res, next) {
         
 
     }catch (err) {
-        console.error(err);
-        return res.status(401).json({error: "Token inválido ou expirado"})
+        throw err
     }
 }

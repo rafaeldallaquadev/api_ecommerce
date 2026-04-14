@@ -12,6 +12,13 @@ if (!JWT_SECRET) {
 }
 
 export async function registerUser( name, email, password) {
+    if (!name || !email || !password) {
+        const error = new Error ("Campos obrigatórios")
+        error.status = 400
+        throw error
+        }
+
+
     const emailNormalized = email.trim().toLowerCase()
     const nameNormalized = name.trim();
     const saltOrRounds = 10

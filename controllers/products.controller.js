@@ -9,7 +9,7 @@ export async function newProduct(req, res, next) {
         const product = await services.createProduct(name, price, stock, userId, description)
 
         return res.status(201).json({
-            message: "Produto cadastrado com sucesso",
+            success: true,
             data: product
         });
     } catch (err) {
@@ -27,7 +27,7 @@ export async function updateProduct (req, res, next) {
         const product = await services.productPatch(id, userId, name, description, price, stock)
         
         return res.status(200).json({
-            message: "Produto atualizado com sucesso",
+            success: true,
             data: product
         });
 
@@ -43,9 +43,9 @@ export async function deleteProduct(req, res, next) {
         const product = await services.productRemove(id, userId);
 
         return res.status(200).json({
-            message: "Produto removido com sucesso",
+            success: true,
             data: product
-        })
+        });
         
     } catch (err) {
         next(err)
@@ -68,7 +68,10 @@ export async function listProducts(req, res, next) {
         const products = await services.productsFilter(name, minPrice, maxPrice,
             inStock, sortBy, order, page, limit);
 
-        return res.status(200).json(products);
+        return res.status(200).json({
+            success: true,
+            data: products
+        });
     } catch (err) {
         next(err)
     }
@@ -79,7 +82,10 @@ export async function getProduct(req, res, next) {
         const id = req.params.id
         const product = await services.productByID(id);
 
-        return res.status(200).json(product);
+        return res.status(200).json({
+            success: true,
+            data: product
+        });
     } catch (err) {
         next(err)
     }

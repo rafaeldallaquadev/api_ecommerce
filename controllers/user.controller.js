@@ -4,16 +4,13 @@ export async function register(req, res, next){
     try {
         const {name, email, password} = req.body;
 
-        if (!name || !email || !password) {
-            return res.status(400).json({error: "Campos obrigatórios"})
-        }
-
+        
         const user = await services.registerUser(name, email, password);
 
        return res.status(201).json({
-        message: "Usuário cadastrado com sucesso",
-        data: user
-       })
+            success: true,
+            data: user
+        });
     }catch (err) {
         next(err)
     }
@@ -26,7 +23,10 @@ export async function login(req, res, next) {
 
         const userToken = await services.userLogin(email, password)
 
-        return res.status(200).json(userToken)
+        return res.status(200).json({
+            success: true,
+            data: userToken
+        });
         
     }catch (err) {
         next(err)

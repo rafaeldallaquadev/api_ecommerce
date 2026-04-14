@@ -83,6 +83,6 @@ export async function getProductFromWishlist(minPrice, maxPrice,
             return rows
             
         } catch (err) {
-            return err
+            throw err
         }
 }

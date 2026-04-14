@@ -16,7 +16,10 @@ export async function getWishlist(req, res, next) {
         const products = await services.getProductFromWishlist(minPrice, maxPrice,
             inStock, sortBy, order, page, limit, userId)
     
-        return res.status(200).json(products);
+        return res.status(200).json({
+            success: true,
+            data: products
+        });;
     } catch (err) {
         next(err)
     }
@@ -32,9 +35,9 @@ export async function postWishlist(req, res, next) {
 
 
         return res.status(201).json({
-            message: 'Produto adicionado à lista de desejos',
+            success: true,
             data: newWish
-        })
+        });
         
     } catch (err) {
         next(err)
@@ -49,10 +52,10 @@ export async function delWishlist(req, res, next) {
 
         const deleted = await services.deleteProductFromWishlist(userId, productId);
 
-        res.status(200).json({
-            message: "Produto removido da wishlist",
+        return res.status(200).json({
+            success: true,
             data: deleted
-        })
+        });
     } catch (err) {
         next(err)
     }

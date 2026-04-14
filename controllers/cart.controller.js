@@ -1,15 +1,15 @@
 import * as services from "../services/cart.services.js"
 
-export async function getCart (req, res) {
+export async function getCart (req, res, next) {
     try {
         const userId = req.user.id;
         const products = await services.cartList(userId);
-        return res.status(200).json(products)
+        return res.status(200).json({
+            success: true,
+            data: products})
         
     } catch (err) {
-        return res.status(err.status || 500).json({
-            error: err.message || "Erro no servidor"
-        })
+        next(err)
     }
 }
 
@@ -21,7 +21,7 @@ export async function addToCart(req, res, next) {
         const addedItem = await services.addingProduct(userId, productId, quantity)
 
         return res.status(201).json({
-            message: "Produto adicionado ao carrinho",
+            success: true,
             data: addedItem
         })
 
@@ -36,11 +36,11 @@ export async function updateQuantity(req, res, next) {
         const productId = req.params.product_id
         const {quantity} = req.body
 
-        const quantidadeAlterada = await services.putNewQuantity(userId, productId, quantity);
+        const newQuantity = await services.putNewQuantity(userId, productId, quantity);
 
         res.status(200).json({
-            message: "Quantidade de produtos atualizada",
-            data: quantidadeAlterada
+            success: true,
+            data: newQuantity
         })
 
         
@@ -57,7 +57,7 @@ export async function removeFromCart(req, res, next) {
         const removed = await services.removeItem(userId, productId)
     
         return res.status(200).json({
-            message: "Produto removido do carrinho",
+            success: true,
             data: removed
         })
     } catch (err) {
@@ -70,7 +70,10 @@ export async function checkout(req, res, next) {
         const userId = req.user.id
         const purchase = await services.completePurchase(userId)
 
-        res.status(200).json(purchase)
+        res.status(200).json({
+            success: true,
+            data: purchase
+        })
     } catch (err) {
         next(err)
     }
