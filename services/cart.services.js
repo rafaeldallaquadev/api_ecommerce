@@ -1,7 +1,3 @@
-//services/cart.services.js
-//===================================
- 
-
 import {pool} from '../db.js'
 
 export async function cartList(userId) {
@@ -37,13 +33,13 @@ export async function addingProduct(userId, productId, quantity) {
         const parsedProductId = Number(productId);
         const parsedQuantity = Number(quantity)
 
-        if (parsedProductId === undefined || isNaN(parsedProductId)){
+        if (isNaN(parsedProductId)){
                 const error = new Error("ID de produto inválido")
                 error.status = 400
                 throw error
             }
             
-        if (parsedQuantity === undefined || isNaN(parsedQuantity) || parsedQuantity <= 0){
+        if (isNaN(parsedQuantity) || parsedQuantity <= 0){
             const error = new Error("Quantidade inválida")
             error.status = 400
             console.log(parsedQuantity, typeof parsedQuantity)
@@ -156,7 +152,7 @@ export async function removeItem(userId, productId){
     try {
         const parsedProductId = Number(productId)
 
-        if (parsedProductId === undefined || isNaN(parsedProductId)){
+        if (isNaN(parsedProductId)){
             const error = new Error("ID de produto inválido")
             error.status = 400
             throw error

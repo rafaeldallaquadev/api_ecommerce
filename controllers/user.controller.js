@@ -1,6 +1,3 @@
-//controllers/user.controller.js
-//===================================
- 
 import * as services from '../services/user.services.js'
 
 export async function register(req, res){

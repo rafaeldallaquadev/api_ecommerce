@@ -1,7 +1,3 @@
-//controllers/cart.controller.js
-//===================================
- 
-import { pool } from "../db.js";
 import * as services from "../services/cart.services.js"
 
 export async function getCart (req, res) {

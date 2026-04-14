@@ -1,7 +1,3 @@
-//services/products.services.js
-//===================================
- 
-
 import {pool} from '../db.js'
 
 export async function createProduct (name, price, stock, userId, description) {

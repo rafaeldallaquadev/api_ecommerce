@@ -1,8 +1,3 @@
-//services/wishlist.services.js
-//===================================
- 
-
-import mysql from 'mysql2/promise'
 import {pool} from '../db.js'
 
 export async function addProductToWishlist(userId, productId) {
