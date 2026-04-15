@@ -6,6 +6,7 @@ dotenv.config()
 
 
 const JWT_SECRET = process.env.JWT_SECRET
+const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET
 
 if (!JWT_SECRET) {
     throw new Error("JWT_SECRET não definido");
@@ -71,12 +72,19 @@ export async function userLogin(email, password) {
         throw error
     }
 
-    const token = jwt.sign({id: user.id, name: user.name, email: user.email, role: user.role}, 
+    const accessToken = jwt.sign({id: user.id, name: user.name, email: user.email, role: user.role}, 
         JWT_SECRET , 
-        {expiresIn: '7d'})
+        {expiresIn: '15m'})
+
+    const refreshToken = jwt.sign(
+        { id: user.id },
+        JWT_REFRESH_SECRET,
+        { expiresIn: '7d' }
+    );
         
     return {
-        accessToken: token,
+        accessToken,
+        refreshToken,
         id: user.id,
         name: user.name,
         email: user.email
