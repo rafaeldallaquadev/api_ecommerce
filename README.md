@@ -160,12 +160,17 @@ http://localhost:3000
 
 ---
 
+## Uso via API
+
+### Base URL:
+https://api-ecommerce-ntcw.onrender.com
+
 ## 📌 Endpoints principais
 
 ### 👤 Auth
 
-* `POST /register`
-* `POST /login`
+* `POST /user/register`
+* `POST /user/login`
 
 ### 📦 Products
 
@@ -178,9 +183,9 @@ http://localhost:3000
 ### 🛒 Cart
 
 * `GET /cart`
-* `POST /cart/add/:product_id`
-* `PUT /cart/update/:product_id`
-* `DELETE /cart/delete/:product_id`
+* `POST /cart/:product_id`
+* `PUT /cart/:product_id`
+* `DELETE /cart/:product_id`
 * `POST /cart/checkout`
 
 ### ⭐ Wishlist
