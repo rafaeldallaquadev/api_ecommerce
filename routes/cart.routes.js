@@ -9,12 +9,14 @@ const router = express.Router();
 
 router.get('/', verifyAuth,  controller.getCart)
 
+router.post('/checkout', verifyAuth, controller.checkout)
+
 router.post('/:product_id', verifyAuth, controller.addToCart)
 
 router.put('/:product_id', verifyAuth, controller.updateQuantity);
 
 router.delete('/:product_id', verifyAuth, controller.removeFromCart);
 
-router.post('/checkout', verifyAuth, controller.checkout)
+
 
 export default router
