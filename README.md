@@ -196,6 +196,26 @@ https://api-ecommerce-ntcw.onrender.com
 
 ---
 
+## 📮 Postman Collection
+
+Este projeto inclui uma collection completa para testes da API.
+
+### 📌 O que contém:
+- Autenticação (register, login, refresh token)
+- CRUD de produtos
+- Carrinho de compras
+- Wishlist
+- Fluxo completo com JWT automático
+
+### ⚙️ Como usar:
+1. Importe o arquivo `postman_collection.json`
+2. Configure o environment com:
+   - base_url
+   - token
+3. Execute o login para gerar o token automaticamente
+
+
+
 ## 📈 Pontos fortes do projeto
 
 ✔ Arquitetura escalável em camadas
